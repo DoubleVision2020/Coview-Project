@@ -5,15 +5,6 @@ const {WebhookClient} = require('dialogflow-fulfillment');
 const {Payload} = require('dialogflow-fulfillment');
 const MapsClient = require('@googlemaps/google-maps-services-js').Client;
 const {BigQuery} = require('@google-cloud/bigquery');
-const nodemailer = require("nodemailer");
-
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'radhika.jadhav01.1027459@gmail.com',
-        pass: 'Radhu@143'
-    }
-});
 
 process.env.DEBUG = 'dialogflow:debug';  // enables lib debugging statements
 
@@ -172,33 +163,13 @@ exports.dialogflowFirebaseFulfillment =
           'Dialogflow Request headers: ' + JSON.stringify(request.headers));
       console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
   
-function sendEmailHandler(agent){
-  const {email, name} = agent.parameters;
-
-  const mailOptions = {
-    from: "Coview-Covid19-Info", // sender address
-    to: email, // list of receivers
-    subject: "Email from chatbot", // Subject line
-    html: `<p> Hello ${name}, I'm sorry, I can't find statistics for confirmed cases </p>`
-  };
-
-  transporter.sendMail(mailOptions, function (err, info) {
-      if(err)
-      {
-        console.log(err);
-      }
-  });
-} 
 
       let intentMap = new Map();
    
 
 
       intentMap.set('coronavirus.confirmed_cases', confirmedCases);
-      intentMap.set('coronavirus.death', death);
-  		
-      intentMap.set('sendEmail', sendEmailHandler);
-  	
+      intentMap.set('coronavirus.death', death);	
 
       agent.handleRequest(intentMap);
     });
